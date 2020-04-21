@@ -36,3 +36,25 @@ class CallExprAST : public ExprAST {
       : Callee(callee), Args(std::move(args)) {}
 }
 
+// This is function declaration part, which captures the name of the function and its
+// arguments
+class PrototypeAST : public ExprAST {
+  std::string Name;
+  std::vector<std::string> Args;
+
+  public:
+    PrototypeAST(const std::string& name, std::vector<std::string>& args)
+      : Name(name), Args(args) {}
+
+    const std::string &getName() const { return Name; }
+}
+
+// Function definition
+class FunctionAST : public ExprAST {
+  std::unique_ptr<PrototypeAST> Proto;
+  std::unique_ptr<ExprAST> Body;
+
+  public:
+    FunctionAST(std::unique_ptr<PrototypeAST> proto, std::unique_ptr<ExprAST> body)
+      : Proto(std::move(proto)), Body(std::move(body)) {}
+}
