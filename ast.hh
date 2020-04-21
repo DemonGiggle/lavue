@@ -1,22 +1,25 @@
+#include <memory>
+#include <vector>
+
 // base class of all AST node
 class ExprAST {
   public:
     virtual ~ExprAST() {}
-}
+};
 
 class NumberExprAST : public ExprAST {
   double Val;
 
   public:
     NumberExprAST(double val) : Val(val) {}
-}
+};
 
 class VariableExprAST : public ExprAST {
   std::string Name;
 
   public:
     VariableExprAST(std::string &name) : Name(name) {}
-}
+};
 
 class BinaryExprAST : public ExprAST {
   char Op;
@@ -25,7 +28,7 @@ class BinaryExprAST : public ExprAST {
   public:
     BinaryExprAST(char op, std::unique_ptr<ExprAST> lhs, std::unique_ptr<ExprAST> rhs)
       : Op(op), LHS(std::move(lhs)), RHS(std::move(rhs)) {}
-}
+};
 
 class CallExprAST : public ExprAST {
   std::string Callee;
@@ -34,7 +37,7 @@ class CallExprAST : public ExprAST {
   public:
     CallExprAST(const std::string &callee, std::vector<std::unique_ptr<ExprAST>> args) 
       : Callee(callee), Args(std::move(args)) {}
-}
+};
 
 // This is function declaration part, which captures the name of the function and its
 // arguments
@@ -47,7 +50,7 @@ class PrototypeAST : public ExprAST {
       : Name(name), Args(args) {}
 
     const std::string &getName() const { return Name; }
-}
+};
 
 // Function definition
 class FunctionAST : public ExprAST {
@@ -57,4 +60,4 @@ class FunctionAST : public ExprAST {
   public:
     FunctionAST(std::unique_ptr<PrototypeAST> proto, std::unique_ptr<ExprAST> body)
       : Proto(std::move(proto)), Body(std::move(body)) {}
-}
+};
