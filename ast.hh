@@ -46,8 +46,8 @@ class PrototypeAST : public ExprAST {
   std::vector<std::string> Args;
 
   public:
-    PrototypeAST(const std::string& name, std::vector<std::string>& args)
-      : Name(name), Args(args) {}
+    PrototypeAST(const std::string& name, std::vector<std::string> args)
+      : Name(name), Args(std::move(args)) {}
 
     const std::string &getName() const { return Name; }
 };
