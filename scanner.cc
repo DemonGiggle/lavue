@@ -24,7 +24,7 @@ static std::map<char, int> BinopPrecedence;  // Binary operation precedence
 static std::unique_ptr<ExprAST> ParseExpression();
 
 static int GetTokPrecedence() {
-  if (!isdigit(CurTok)) 
+  if (!isascii(CurTok)) 
     return -1;
 
   int tokPrec = BinopPrecedence[CurTok];
@@ -77,7 +77,7 @@ static int gettok() {
       numStr += LastChar;
       LastChar = getchar();
     } while (isdigit(LastChar) || LastChar == '.');
-    NumVal = strtod(numStr.c_str(), 0);
+    NumVal = strtod(numStr.c_str(), nullptr);
     return tok_number;
   }
 

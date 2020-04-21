@@ -4,7 +4,7 @@
 // base class of all AST node
 class ExprAST {
   public:
-    virtual ~ExprAST() {}
+    virtual ~ExprAST() = default;
 };
 
 class NumberExprAST : public ExprAST {
