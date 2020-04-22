@@ -6,3 +6,4 @@ add_executable(lavue compiler.cc)
 target_include_directories(lavue PUBLIC 
                            "${PROJECT_BINARY_DIR}/src")
 
+install(TARGETS lavue DESTINATION bin)
