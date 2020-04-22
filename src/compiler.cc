@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include <map>
+#include "version.hh"
 #include "ast.hh"
 
 enum Token {
@@ -349,6 +350,8 @@ static void MainLoop() {
 }
 
 int main() {
+  fprintf(stderr, "Version: %d.%d\n", lavue_VERSION_MAJOR, lavue_VERSION_MINOR);
+
   BinopPrecedence['<'] = 10;
   BinopPrecedence['+'] = 20;
   BinopPrecedence['-'] = 20;
