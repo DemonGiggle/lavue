@@ -1,2 +1,7 @@
+#ifndef VERSION_H
+#define VERSION_H
+
 #define lavue_VERSION_MAJOR @lavue_VERSION_MAJOR@
 #define lavue_VERSION_MINOR @lavue_VERSION_MINOR@
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef AST_H
+#define AST_H
+
 #include <memory>
 #include <vector>
 #include "llvm/IR/Value.h"
@@ -71,3 +74,5 @@ class FunctionAST : public ExprAST {
       : Proto(std::move(proto)), Body(std::move(body)) {}
     virtual Value *codegen();
 };
+
+#endif

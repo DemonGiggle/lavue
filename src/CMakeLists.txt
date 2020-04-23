@@ -14,7 +14,8 @@ add_definitions(${LLVM_DEFINITIONS})
 
 add_executable(lavue 
                compiler.cc
-               ast.cc)
+               ast.cc
+               utils.cc)
 
 target_include_directories(lavue PUBLIC 
                            "${PROJECT_BINARY_DIR}/src")
