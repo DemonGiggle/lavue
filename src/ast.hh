@@ -52,7 +52,7 @@ class CallExprAST : public ExprAST {
 
 // This is function declaration part, which captures the name of the function and its
 // arguments
-class PrototypeAST : public ExprAST {
+class PrototypeAST {
   std::string Name;
   std::vector<std::string> Args;
 
@@ -61,7 +61,7 @@ class PrototypeAST : public ExprAST {
       : Name(name), Args(std::move(args)) {}
 
     const std::string &getName() const { return Name; }
-    virtual Value *codegen();
+    Function *codegen();
 };
 
 // Function definition
