@@ -3,9 +3,14 @@
 
 #include <memory>
 #include <vector>
+#include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/Function.h"
 #include "llvm/IR/Value.h"
 
 using namespace llvm;
+
+void LLVMModuleSetup();
+void LLVMModuleDump();
 
 // base class of all AST node
 class ExprAST {

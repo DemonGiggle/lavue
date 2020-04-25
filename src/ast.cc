@@ -15,6 +15,14 @@ static IRBuilder<> Builder(TheContext);
 static std::unique_ptr<Module> TheModule;
 static std::map<std::string, Value*> NamedValues;
 
+void LLVMModuleSetup() {
+  TheModule = std::make_unique<Module>("lavue jit", TheContext);
+}
+
+void LLVMModuleDump() {
+  TheModule->print(errs(), nullptr);
+}
+
 
 Value *NumberExprAST::codegen() {
   return ConstantFP::get(TheContext, APFloat(Val));

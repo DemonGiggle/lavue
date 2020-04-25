@@ -292,8 +292,12 @@ static std::unique_ptr<FunctionAST> ParseTopLevelExpr() {
 }
 
 static void HandleDefinition() {
-  if (ParseDefinition()) {
-    fprintf(stderr, "Parse a function definition\n");
+  if (auto fnAST = ParseDefinition()) {
+    if (auto* fnIR = fnAST->codegen()) {
+      fprintf(stderr, "Parse a function definition\n");
+      fnIR->print(errs());
+      fprintf(stderr, "\n");
+    }
   } else {
     // error recovery
     getNextToken();
@@ -301,8 +305,12 @@ static void HandleDefinition() {
 }
 
 static void HandleExtern() {
-  if (ParseExtern()) {
-    fprintf(stderr, "Parse an extern\n");
+  if (auto extAST = ParseExtern()) {
+    if (auto* extIR = extAST->codegen()) {
+      fprintf(stderr, "Parse an extern\n");
+      extIR->print(errs());
+      fprintf(stderr, "\n");
+    }
   } else {
     // error recovery
     getNextToken();
@@ -310,8 +318,12 @@ static void HandleExtern() {
 }
 
 static void HandleTopLevelExpression() {
-  if (ParseTopLevelExpr()) {
-    fprintf(stderr, "Parse top-level expr\n");
+  if (auto fnAST = ParseTopLevelExpr()) {
+    if (auto* fnIR = fnAST->codegen()) {
+      fprintf(stderr, "Parse top-level expr\n");
+      fnIR->print(errs());
+      fprintf(stderr, "\n");
+    }
   } else {
     // error recovery
     getNextToken();
@@ -349,10 +361,14 @@ int main() {
   BinopPrecedence['-'] = 20;
   BinopPrecedence['*'] = 40;  // highest precedence
 
+  LLVMModuleSetup();
+
   fprintf(stderr, "ready> ");
   getNextToken();
 
   MainLoop();
+
+  LLVMModuleDump();
 
   return 0;
 }
