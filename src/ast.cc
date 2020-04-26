@@ -4,25 +4,35 @@
 
 #include "ast.hh"
 #include "utils.hh"
+#include "llvm/LinkAllPasses.h"
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Verifier.h"
+#include "llvm/IR/LegacyPassManager.h"
 
 
 static LLVMContext TheContext;
 static IRBuilder<> Builder(TheContext);
 static std::unique_ptr<Module> TheModule;
+static std::unique_ptr<legacy::FunctionPassManager> TheFPM;
 static std::map<std::string, Value*> NamedValues;
 
 void LLVMModuleSetup() {
   TheModule = std::make_unique<Module>("lavue jit", TheContext);
+  TheFPM = std::make_unique<legacy::FunctionPassManager>(TheModule.get()); 
+  
+  TheFPM->add(createInstructionCombiningPass());
+  TheFPM->add(createReassociatePass());
+  TheFPM->add(createGVNPass());
+  TheFPM->add(createCFGSimplificationPass());
+
+  TheFPM->doInitialization();
 }
 
 void LLVMModuleDump() {
   TheModule->print(errs(), nullptr);
 }
-
 
 Value *NumberExprAST::codegen() {
   return ConstantFP::get(TheContext, APFloat(Val));
@@ -134,6 +144,8 @@ Value *FunctionAST::codegen() {
 
     // validate the generated code, checking for consistency
     verifyFunction(*function);
+
+    TheFPM->run(*function);
 
     return function;
   }
