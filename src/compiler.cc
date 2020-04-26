@@ -330,7 +330,7 @@ static void HandleTopLevelExpression() {
       // get symbol address and cast it to correct type
       double (*fp)() = nullptr;
       auto extrAddr = symbol.getAddress();
-      fp = (double (*)())*extrAddr;
+      fp = (double (*)())extrAddr;
       fprintf(stderr, "> %f\n", fp());
 
       lavueJIT()->removeModule(h);
