@@ -18,7 +18,7 @@ static std::unique_ptr<Module> TheModule;
 static std::unique_ptr<legacy::FunctionPassManager> TheFPM;
 static std::map<std::string, Value*> NamedValues;
 
-void LLVMModuleSetup() {
+void LLVMModuleInitialze() {
   TheModule = std::make_unique<Module>("lavue jit", TheContext);
   TheFPM = std::make_unique<legacy::FunctionPassManager>(TheModule.get()); 
   

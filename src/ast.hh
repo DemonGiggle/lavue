@@ -9,7 +9,7 @@
 
 using namespace llvm;
 
-void LLVMModuleSetup();
+void LLVMModuleInitialze();
 void LLVMModuleDump();
 
 // base class of all AST node

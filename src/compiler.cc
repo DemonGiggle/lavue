@@ -361,7 +361,7 @@ int main() {
   BinopPrecedence['-'] = 20;
   BinopPrecedence['*'] = 40;  // highest precedence
 
-  LLVMModuleSetup();
+  LLVMModuleInitialze();
 
   fprintf(stderr, "ready> ");
   getNextToken();
