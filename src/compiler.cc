@@ -319,10 +319,21 @@ static void HandleExtern() {
 
 static void HandleTopLevelExpression() {
   if (auto fnAST = ParseTopLevelExpr()) {
-    if (auto* fnIR = fnAST->codegen()) {
-      fprintf(stderr, "Parse top-level expr\n");
-      fnIR->print(errs());
-      fprintf(stderr, "\n");
+    if (fnAST->codegen()) {
+      auto h = lavueJIT()->addModule(internalModule());
+      LLVMModuleInitialze();
+
+      // search JIT for __anon_expr symbol
+      auto symbol = lavueJIT()->findSymbol("__anon_expr");
+      assert(symbol && "__anon_expr not found");
+
+      // get symbol address and cast it to correct type
+      double (*fp)() = nullptr;
+      auto extrAddr = symbol.getAddress();
+      fp = (double (*)())*extrAddr;
+      fprintf(stderr, "> %f\n", fp());
+
+      lavueJIT()->removeModule(h);
     }
   } else {
     // error recovery
@@ -354,6 +365,10 @@ static void MainLoop() {
 }
 
 int main() {
+  InitializeNativeTarget();
+  InitializeNativeTargetAsmPrinter();
+  InitializeNativeTargetAsmParser();
+
   fprintf(stderr, "Version: %d.%d\n", lavue_VERSION_MAJOR, lavue_VERSION_MINOR);
 
   BinopPrecedence['<'] = 10;
@@ -361,6 +376,7 @@ int main() {
   BinopPrecedence['-'] = 20;
   BinopPrecedence['*'] = 40;  // highest precedence
 
+  InitializeJIT();
   LLVMModuleInitialze();
 
   fprintf(stderr, "ready> ");

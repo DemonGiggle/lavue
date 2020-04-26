@@ -17,9 +17,12 @@ static IRBuilder<> Builder(TheContext);
 static std::unique_ptr<Module> TheModule;
 static std::unique_ptr<legacy::FunctionPassManager> TheFPM;
 static std::map<std::string, Value*> NamedValues;
+static std::unique_ptr<LavueJIT> TheJIT;
 
 void LLVMModuleInitialze() {
   TheModule = std::make_unique<Module>("lavue jit", TheContext);
+  TheModule->setDataLayout(TheJIT->getTargetMachine().createDataLayout());
+
   TheFPM = std::make_unique<legacy::FunctionPassManager>(TheModule.get()); 
   
   TheFPM->add(createInstructionCombiningPass());
@@ -32,6 +35,18 @@ void LLVMModuleInitialze() {
 
 void LLVMModuleDump() {
   TheModule->print(errs(), nullptr);
+}
+
+void InitializeJIT() {
+  TheJIT = std::make_unique<LavueJIT>();
+}
+
+LavueJIT* lavueJIT() {
+  return TheJIT.get();
+}
+
+std::unique_ptr<Module> internalModule() {
+  return std::move(TheModule);
 }
 
 Value *NumberExprAST::codegen() {

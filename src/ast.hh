@@ -3,7 +3,9 @@
 
 #include <memory>
 #include <vector>
+#include "lavue_jit.hh"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/TargetSelect.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Value.h"
 
@@ -11,6 +13,10 @@ using namespace llvm;
 
 void LLVMModuleInitialze();
 void LLVMModuleDump();
+void InitializeJIT();
+
+LavueJIT* lavueJIT();
+std::unique_ptr<Module> internalModule();
 
 // base class of all AST node
 class ExprAST {
