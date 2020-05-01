@@ -9,7 +9,7 @@ message(STATUS "LLVM include dirs: ${LLVM_INCLUDE_DIRS}")
 message(STATUS "LLVM definitions: ${LLVM_DEFINITIONS}")
 message(STATUS "LLVM library: ${llvm_libs}")
 llvm_map_components_to_libnames(llvm_libs 
-                                core passes instrumentation objcarcopts codegen)
+                                core passes instrumentation objcarcopts codegen x86info)
 
 include_directories(${LLVM_INCLUDE_DIRS})
 add_definitions(${LLVM_DEFINITIONS})
